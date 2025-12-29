@@ -8,10 +8,10 @@ def register_dataset(name):
     return decorator
 
 
-def get_dataset(name):
+def get_dataset(name, **kwargs):
     if name not in DATASET_REGISTRY:
         raise ValueError(f"Dataset '{name}' is not registered")
-    return DATASET_REGISTRY[name]
+    return DATASET_REGISTRY[name](**kwargs)
 
 
 def list_datasets():

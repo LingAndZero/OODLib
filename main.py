@@ -1,7 +1,11 @@
-from baselines import get_baseline, list_baselines
-from dataset import get_dataset, list_datasets
+from baselines import get_baseline
+from datasets import get_dataset, list_datasets
 
 
 if __name__ == "__main__":
-    print(list_baselines())
-    print(list_datasets())
+
+    dataset = get_dataset(
+        "cifar10",
+        root="./data",
+    )
+    print(dataset[0])
