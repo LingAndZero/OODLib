@@ -7,6 +7,7 @@ class BaseDataset(Dataset):
         super().__init__()
         self.root = root
         self.dataset = None
+        self.num_classes = None
         self.class_names = None
 
     def __len__(self):

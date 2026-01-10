@@ -27,7 +27,8 @@ class ImageNet1k(BaseDataset):
             root=os.path.join(self.root, "ImageNet-1k/imagenet/val"),
             transform=test_largescale,
         )
-
+        
+        self.num_classes = 1000
         self.class_names = ["tench", "goldfish", "great white shark", "tiger shark", "hammerhead shark", "electric ray", 
                            "stingray", "rooster", "hen", "ostrich", "brambling", "goldfinch", "house finch", "junco", "indigo bunting", 
                            "American robin", "bulbul", "jay", "magpie", "chickadee", "American dipper", "kite (bird of prey)", "bald eagle", 
