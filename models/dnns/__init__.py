@@ -1,4 +1,4 @@
-import models.dnns.resnet.model
+import models.dnns.resnet.wrapper
 
 __all__ = [
     "resnet",

@@ -1,7 +1,7 @@
 class BaseBaseline:
 
-    def __init__(self, config):
-        self.config = config
+    def __init__(self, model, device):
+        pass
 
-    def score(self, logits=None, features=None):
-        raise NotImplementedError
+    def eval(self, data_loader):
+        pass

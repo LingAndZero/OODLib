@@ -1,7 +1,7 @@
 class BaseModel:
 
-    def __init__(self, num_classes):
-        super().__init__()
+    def __init__(self, num_classes, device):
+        pass
 
     def get_output(self, x):
         pass

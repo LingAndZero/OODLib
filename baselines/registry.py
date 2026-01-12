@@ -8,10 +8,10 @@ def register_baseline(name):
     return decorator
 
 
-def get_baseline(name):
+def get_baseline(name, **kwargs):
     if name not in BASELINE_REGISTRY:
         raise ValueError(f"Baseline '{name}' is not registered")
-    return BASELINE_REGISTRY[name]
+    return BASELINE_REGISTRY[name](**kwargs)
 
 
 def list_baselines():
