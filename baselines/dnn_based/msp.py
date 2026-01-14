@@ -9,9 +9,6 @@ from tqdm import tqdm
 
 @register_baseline("msp")
 class MSP(BaseBaseline):
-    def __init__(self, model, args):
-        self.model = model
-        self.device = args.device
 
     @torch.no_grad()
     def eval(self, data_loader):
