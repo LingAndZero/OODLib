@@ -10,7 +10,9 @@ class CLIP(BaseModel):
     def __init__(self, num_classes, device):
         super().__init__(num_classes, device)
         self.model = load("ViT-B/16", device)
-        # texts = tokenize([f"a photo of a {label}" for label in ID_labels]).to(device)
+
+    def eval(self):
+        self.model.eval()
 
     def get_output(self, image, text):
         image_features = self.model.encode_image(image)

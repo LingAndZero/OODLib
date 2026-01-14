@@ -7,9 +7,9 @@ import numpy as np
 from tqdm import tqdm
 
 
-@register_baseline("msp")
-class MSP(BaseBaseline):
-
+@register_baseline("maxlogit")
+class MaxLogit(BaseBaseline):
+    
     @torch.no_grad()
     def eval(self, data_loader):
         self.model.eval()
@@ -19,8 +19,8 @@ class MSP(BaseBaseline):
             images = images.to(self.device)
             output = self.model.get_output(images)
 
-            smax = (F.softmax(output, dim=1)).data.cpu().numpy()
-            output = np.max(smax, axis=1)
+            output = output.data.cpu().numpy()
+            output = np.max(output, axis=1)
 
             result.append(output)
 

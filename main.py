@@ -5,7 +5,6 @@ from models import get_model, list_models
 from utils.misc import *
 from utils.metrics import cal_metric
 
-from torch.utils.data import DataLoader
 import argparse
 import torch
 
@@ -37,30 +36,23 @@ if __name__ == "__main__":
     # get ID & OOD datasets
     ind_dataset = get_dataset(args.ind_dataset)
     ood_dataset = get_dataset(args.ood_dataset)
-
-    # get ID & OOD loaders
-    ind_loader = DataLoader(dataset=ind_dataset, batch_size=args.bs, pin_memory=True, num_workers=8, shuffle=False)
-    ood_loader = DataLoader(dataset=ood_dataset, batch_size=args.bs, pin_memory=True, num_workers=8, shuffle=False)
     
     # get model
     model = get_model(args.model, num_classes=ind_dataset.num_classes, device=args.device)
 
     # get ood detector
-    ood_detector = get_baseline(args.ood_method, model=model, args=args)
+    ood_detector = get_baseline(args.ood_method, 
+                                model=model, 
+                                ind_dataset=ind_dataset, 
+                                ood_dataset=ood_dataset, 
+                                device=args.device,
+                                args=args)
 
     # get id&ood scores
-    ind_scores = ood_detector.eval(ind_loader)
-    ood_scores = ood_detector.eval(ood_loader)
+    ind_scores = ood_detector.eval(ood_detector.ind_loader)
+    ood_scores = ood_detector.eval(ood_detector.ood_loader)
 
     # get metrics
-    import numpy as np
-    ind_labels = np.ones(ind_scores.shape[0])
-    ood_labels = np.zeros(ood_scores.shape[0])
-
-    labels = np.concatenate([ind_labels, ood_labels])
-    scores = np.concatenate([ind_scores, ood_scores])
-
-    auroc, aupr, fpr = cal_metric(labels, scores)
-
+    auroc, aupr, fpr = cal_metric(ind_scores, ood_scores)
     print("{:10} {}".format("AUROC:", auroc))
     print("{:10} {}".format("FPR:", fpr))
