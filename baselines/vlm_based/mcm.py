@@ -14,7 +14,8 @@ class MCM(BaseBaseline):
         
         self.model.eval()
 
-        texts = self.model.get_texts("a photo of a {}", self.ind_dataset.class_names).to(self.device)
+        prompt = "a photo of a {}"
+        texts = self.model.get_texts(prompt, self.ind_dataset.class_names).to(self.device)
         self.text_features = self.model.get_text_feature(texts)
 
         self.T = 1
