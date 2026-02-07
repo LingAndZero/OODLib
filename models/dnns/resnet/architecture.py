@@ -160,8 +160,9 @@ class AbstractResNet(nn.Module):
     
     def get_feature(self, x):
         x = self.features(x)
-        feature = self.avgpool(x)
-        return feature
+        feat = self.avgpool(x)
+        feat = feat.view(feat.size(0), -1)
+        return feat
 
     
     def load_state_dict(self, state_dict, strict=True):
