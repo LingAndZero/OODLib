@@ -20,10 +20,10 @@ class Energy(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            output = self.model.get_output(images)
+            logits = self.model.get_output(images)
 
-            energy = self.T * torch.logsumexp(output / self.T, dim=1).data.cpu().numpy()
-            result.append(energy)
+            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
+            result.append(energy.detach().cpu().numpy())
 
         return np.concatenate(result)
 
