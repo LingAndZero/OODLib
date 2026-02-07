@@ -27,10 +27,10 @@ class ASH(BaseBaseline):
             # output = ash_b(feature, self.p)
             # output = ash_p(feature, self.p)
             feature = feature.view(feature.size(0), -1)
-            output = self.model.linear(feature)
+            logits = self.model.linear(feature)
 
-            energy = self.T * torch.logsumexp(output / self.T, dim=1).data.cpu().numpy()
-            result.append(energy)
+            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
+            result.append(energy.detach().cpu().numpy())
 
         return np.concatenate(result)
 
