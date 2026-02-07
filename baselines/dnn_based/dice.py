@@ -13,29 +13,37 @@ class DICE(BaseBaseline):
 
         self.model.eval()
         self.T = 1
-        self.p = 90
+        self.p = 70
 
+        self.mask = self.get_mask()
+        with torch.no_grad():
+            self.model.linear.weight.mul_(self.mask)
+    
+    def get_mask(self):
         train_features = self.get_train_feature()
 
-        train_all_features = []
-        for i in range(len(train_features)):
-            train_all_features.extend(train_features[i].cpu().numpy())
-                    
-        self.threshold = np.percentile(train_all_features, self.p)
-   
+        feats = []
+        for t in train_features:
+            feats.append(t.cpu())
+        feats = torch.cat(feats, dim=0)
+
+        mean_feat = feats.mean(dim=0)
+        weight = self.model.linear.weight.detach().cpu()
+        contrib = mean_feat.unsqueeze(0) * weight
+        threshold = np.percentile(contrib, self.p)
+        
+        mask = (contrib > threshold).float().to(self.device)
+        return mask
+    
     @torch.no_grad()
     def eval(self, data_loader):
         result = []
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            feature = self.model.get_feature(images)
+            logits = self.model.get_output(images)
 
-            feature = feature.clip(max=self.threshold)
-            feature = feature.view(feature.size(0), -1)
-            output = self.model.linear(feature)
-
-            energy = self.T * torch.logsumexp(output / self.T, dim=1).data.cpu().numpy()
-            result.append(energy)
+            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
+            result.append(energy.detach().cpu().numpy())
 
         return np.concatenate(result)

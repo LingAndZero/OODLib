@@ -17,10 +17,10 @@ class MaxLogit(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            output = self.model.get_output(images)
+            logits = self.model.get_output(images)
 
-            output = output.data.cpu().numpy()
-            output = np.max(output, axis=1)
+            logits = logits.detach().cpu().numpy()
+            output = np.max(logits, axis=1)
 
             result.append(output)
 
