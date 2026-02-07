@@ -23,7 +23,7 @@ class Textures(BaseDataset):
             normalize
         ])
 
-        self.dataset = datasets.ImageFolder(
+        self.test_dataset = datasets.ImageFolder(
             root=os.path.join(self.root, "dtd/images"),
             transform=test_largescale,
         )
