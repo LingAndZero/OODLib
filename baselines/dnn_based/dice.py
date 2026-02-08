@@ -41,9 +41,10 @@ class DICE(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            logits = self.model.get_output(images)
 
-            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
-            result.append(energy.detach().cpu().numpy())
+            logits = self.model.get_output(images)
+            scores = self.T * torch.logsumexp(logits / self.T, dim=1)
+            
+            result.append(scores.cpu().numpy())
 
         return np.concatenate(result)

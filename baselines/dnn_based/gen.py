@@ -22,12 +22,14 @@ class GEN(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            output = self.model.get_output(images)
-            smax = (F.softmax(output, dim=1)).data.cpu().numpy()
-            probs_sorted = np.sort(smax, axis=1)[:,self.M:]
-            scores = np.sum(probs_sorted ** self.gamma * (1 - probs_sorted) ** self.gamma, axis=1)
 
-            result.append(-scores)
+            logits = self.model.get_output(images)
+            probs = F.softmax(logits, dim=1)
+            probs_sorted, _ = torch.sort(probs, dim=1, descending=False)
+            probs_sorted = probs_sorted[:, self.M:]
+            scores = torch.sum((probs_sorted ** self.gamma) * ((1.0 - probs_sorted) ** self.gamma), dim=1)
+
+            result.append(-scores.cpu().numpy())
 
         return np.concatenate(result)
 
