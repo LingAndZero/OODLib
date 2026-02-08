@@ -6,6 +6,7 @@ from .gen import GEN
 from .ash import ASH
 from .react import ReAct
 from .dice import DICE
+from .cadref import CADRef
 
 
 __all__ = [
@@ -17,4 +18,5 @@ __all__ = [
     "ash",
     "react",
     "dice",
+    "cadref",
 ]

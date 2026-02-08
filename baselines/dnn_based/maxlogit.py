@@ -17,11 +17,10 @@ class MaxLogit(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
+
             logits = self.model.get_output(images)
+            scores, _ = torch.max(logits, dim=1)
 
-            logits = logits.detach().cpu().numpy()
-            output = np.max(logits, axis=1)
-
-            result.append(output)
+            result.append(scores.cpu().numpy())
 
         return np.concatenate(result)

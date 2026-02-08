@@ -35,14 +35,13 @@ class ReAct(BaseBaseline):
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
 
-            feat = self.model.get_feature(images)
+            feats = self.model.get_feature(images)
             # clip activations/features
-            feat = torch.clamp(feat, max=self.threshold)
-            feat = feat.view(feat.size(0), -1)
+            feats = torch.clamp(feats, max=self.threshold)
+            feats = feats.view(feats.size(0), -1)
+            logits = self.model.linear(feats)
+            scores = self.T * torch.logsumexp(logits / self.T, dim=1)
 
-            logits = self.model.linear(feat)
-
-            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
-            result.append(energy.detach().cpu().numpy())
+            result.append(scores.cpu().numpy())
 
         return np.concatenate(result)

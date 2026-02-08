@@ -12,7 +12,7 @@ class Energy(BaseBaseline):
         super().__init__(*args, **kwargs)
 
         self.model.eval()
-        self.T = 1
+        self.T = 1.0
 
     @torch.no_grad()
     def eval(self, data_loader):
@@ -20,10 +20,11 @@ class Energy(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            logits = self.model.get_output(images)
 
-            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
-            result.append(energy.detach().cpu().numpy())
+            logits = self.model.get_output(images)
+            scores = self.T * torch.logsumexp(logits / self.T, dim=1)
+
+            result.append(scores.cpu().numpy())
 
         return np.concatenate(result)
 

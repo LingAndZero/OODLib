@@ -7,8 +7,8 @@ import numpy as np
 from tqdm import tqdm
 
 
-@register_baseline("msp")
-class MSP(BaseBaseline):
+@register_baseline("cadref")
+class CADRef(BaseBaseline):
 
     @torch.no_grad()
     def eval(self, data_loader):
@@ -17,11 +17,11 @@ class MSP(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-
             logits = self.model.get_output(images)
-            probs = F.softmax(logits, dim=1)
-            scores = probs.max(dim=1).values
 
-            result.append(scores.cpu().numpy())
+            smax = (F.softmax(logits, dim=1)).data.cpu().numpy()
+            output = np.max(smax, axis=1)
+
+            result.append(output)
 
         return np.concatenate(result)

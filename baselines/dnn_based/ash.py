@@ -12,7 +12,7 @@ class ASH(BaseBaseline):
         super().__init__(*args, **kwargs)
 
         self.model.eval()
-        self.T = 1
+        self.T = 1.0
         self.p = 90
 
     @torch.no_grad()
@@ -21,16 +21,16 @@ class ASH(BaseBaseline):
         
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
-            feature = self.model.get_feature(images)
 
-            feature = ash_s(feature, self.p)
-            # output = ash_b(feature, self.p)
-            # output = ash_p(feature, self.p)
-            feature = feature.view(feature.size(0), -1)
-            logits = self.model.linear(feature)
+            feats = self.model.get_feature(images)
+            feats = ash_s(feats, self.p)
+            # feats = ash_b(feats, self.p)
+            # feats = ash_p(feats, self.p)
+            feats = feats.view(feats.size(0), -1)
+            logits = self.model.linear(feats)
+            scores = self.T * torch.logsumexp(logits / self.T, dim=1)
 
-            energy = self.T * torch.logsumexp(logits / self.T, dim=1)
-            result.append(energy.detach().cpu().numpy())
+            result.append(scores.cpu().numpy())
 
         return np.concatenate(result)
 
