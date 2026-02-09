@@ -2,6 +2,7 @@ from .msp import MSP
 from .odin import ODIN 
 from .energy import Energy
 from .maxlogit import MaxLogit
+from .knn import KNN
 from .gen import GEN
 from .ash import ASH
 from .react import ReAct
@@ -16,6 +17,7 @@ __all__ = [
     "odin",
     "energy",
     "maxlogit",
+    "knn",
     "gen",
     "ash",
     "react",
