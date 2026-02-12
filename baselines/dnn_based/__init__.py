@@ -9,6 +9,7 @@ from .react import ReAct
 from .dice import DICE
 from .optfs import OptFS
 from .vim import ViM
+from .nci import NCI
 from .caref import CARef
 from .cadref import CADRef
 
@@ -25,6 +26,7 @@ __all__ = [
     "dice",
     "optfs",
     "vim",
+    "nci",
     "caref",
     "cadref",
 ]
