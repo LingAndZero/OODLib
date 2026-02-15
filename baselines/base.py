@@ -58,10 +58,9 @@ class BaseBaseline:
             images = images.to(self.device, non_blocking=True)
 
             logits = self.model.get_output(images)
-            features = self.model.get_feature(images)
             p_labels = logits.argmax(dim=1)
 
-            log_cpu = features.detach().to("cpu")
+            log_cpu = logits.detach().to("cpu")
             p_cpu = p_labels.detach().to("cpu")
 
             for c in p_cpu.unique().tolist():
