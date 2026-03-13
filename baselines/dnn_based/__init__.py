@@ -11,6 +11,7 @@ from .optfs import OptFS
 from .vim import ViM
 from .caref import CARef
 from .cadref import CADRef
+from .nci import NCI
 
 
 __all__ = [
@@ -27,4 +28,5 @@ __all__ = [
     "vim",
     "caref",
     "cadref",
+    "nci",
 ]

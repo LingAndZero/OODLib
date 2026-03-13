@@ -26,7 +26,11 @@ class CLIP(BaseModel):
 
         logits =  image_features @ text_features.t()
         if return_feature:
-            return logits, image_features, text_features
+            features = {
+                 "image": image_features,
+                 "text": text_features,
+             }
+            return logits, features
         return logits
 
     def get_text_feature(self, x):
