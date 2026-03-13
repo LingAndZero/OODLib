@@ -12,6 +12,7 @@ from .vim import ViM
 from .caref import CARef
 from .cadref import CADRef
 from .nci import NCI
+from .scale import Scale
 
 
 __all__ = [
@@ -29,4 +30,5 @@ __all__ = [
     "caref",
     "cadref",
     "nci",
+    "scale",
 ]
