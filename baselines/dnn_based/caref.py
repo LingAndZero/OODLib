@@ -33,8 +33,7 @@ class CARef(BaseBaseline):
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
 
-            logits = self.model.get_output(images)
-            feats = self.model.get_feature(images)
+            logits, feats = self.model.get_output(images, return_feature=True)
             class_ids = logits.argmax(dim=1)
             class_proto = self.class_means.index_select(0, class_ids)
             scores = (class_proto - feats).norm(dim=1, p=1) / feats.norm(dim=1, p=1)

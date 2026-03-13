@@ -14,8 +14,12 @@ class ResNet(BaseModel):
     def eval(self):
         self.model.eval()
 
-    def get_output(self, x):
-        return self.model(x)
+    def get_output(self, x, return_feature=False):
+        feat = self.model.get_feature(x)
+        logits = self.linear(feat)
+        if return_feature:
+            return logits, feat
+        return logits
     
     def get_feature(self, x):
         return self.model.get_feature(x)

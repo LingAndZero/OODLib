@@ -22,9 +22,9 @@ def get_eval_options():
     parser.add_argument("--cache_dir", type=str, default="./cache")
 
     parser.add_argument("--random_seed", type=int, default=0)
-    parser.add_argument("--bs", type=int, default=256)
+    parser.add_argument("--bs", type=int, default=128)
 
-    parser.add_argument("--ood_method", type=str, default="vim")
+    parser.add_argument("--ood_method", type=str, default="cadref")
 
     args = parser.parse_args()
     args.device = torch.device('cuda:{}'.format(args.gpu) if torch.cuda.is_available() and args.gpu != -1 else 'cpu')

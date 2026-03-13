@@ -59,8 +59,7 @@ class ViM(BaseBaseline):
         for (images, _) in tqdm(data_loader):
             images = images.to(self.device)
 
-            logits = self.model.get_output(images)
-            feats = self.model.get_feature(images)
+            logits, feats = self.model.get_output(images, return_feature=True)
 
             proj = (feats - self.u) @ self.NS
             vlogit = proj.norm(p=2, dim=1) * self.alpha
